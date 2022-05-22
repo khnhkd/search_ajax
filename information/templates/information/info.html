@@ -1,0 +1,43 @@
+{% extends 'information/base.html' %}
+{% block title %}People page{% endblock %}
+{% block content %}
+    <div>
+        <input type="text" id="searchField" placeholder="Search">
+    </div>
+    <div>
+        {% include 'information/person.html' %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    const searchField = document.getElementById("searchField");
+    const tableBody = document.getElementById("table-body");
+
+    searchField.addEventListener('keyup', (e)=>{
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            const searchValue = e.target.value;
+            if (searchValue.length >= 0){
+                console.log("searchValue", searchValue);
+
+                fetch("/search", {
+                    body: JSON.stringify({ searchText: searchValue}),
+                    method: "POST",
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data.length > 0){
+                            var strHTML = '';
+                            for (var i in data){
+                                strHTML += '<tr><td>' + data[i].id + '</td><td>' + data[i].first_name + '</td><td>' + data[i].last_name + '</td></tr>';
+                            }
+                            tableBody.innerHTML = strHTML;
+                            console.log("data: ", data);
+                        }
+                        else {
+                            tableBody.innerHTML = "No records";
+                        }
+                    })
+            }
+        }
+    });
+{% endblock %}

@@ -1,0 +1,18 @@
+<table id="table-data">
+    <thead>
+        <tr>
+            {% for header in headers %}
+                <th>{{ header.name }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody id="table-body">
+        {% for person in persons %}
+            <tr>
+                {% for info in person %}
+                    <td>{{ info }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
